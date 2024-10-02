@@ -139,5 +139,3 @@ This is a personal learning project, but suggestions and improvements are welcom
 
 ## License
 
-[Specify your license here]
-
