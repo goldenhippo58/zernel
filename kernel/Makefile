@@ -6,7 +6,7 @@ ASFLAGS = -f elf64
 LDFLAGS = -ffreestanding -m64 -nostdlib -nodefaultlibs -no-pie -T linker.ld
 
 # Source files
-SOURCES = kernel.c kernel_helpers.c interrupt.c memory.c process.c syscall.c filesystem.c string.c task.c
+SOURCES = kernel.c kernel_helpers.c interrupt.c memory.c syscall.c filesystem.c string.c task.c
 DRIVER_SOURCES = drivers/serial.c drivers/vga.c drivers/timer.c drivers/keyboard.c
 ASM_SOURCES = boot.asm long_mode_start.asm task_switch.asm
 OBJECTS = $(SOURCES:.c=.o) $(DRIVER_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.o)

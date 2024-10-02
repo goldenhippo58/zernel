@@ -40,6 +40,7 @@ void handle_command(const char* input) {
         vga_writestring("  read <filename> - Read content from a file\n");
         vga_writestring("  delete <filename> - Delete a file\n");
         vga_writestring("  list - List all files\n");
+        vga_writestring("  mkdir <dirname> - Create a new directory\n");
         vga_writestring("  meminfo - Display memory information\n");
         vga_writestring("  test - Run a series of tests\n");
     } else if (strcmp(args[0], "clear") == 0) {
@@ -140,6 +141,18 @@ void handle_command(const char* input) {
         fs_list(buffer, sizeof(buffer));
         vga_writestring("Files:\n");
         vga_writestring(buffer);
+    } else if (strcmp(args[0], "mkdir") == 0) {
+        vga_writestring("DEBUG: Executing mkdir command\n");
+        if (arg_count < 2) {
+            vga_writestring("Usage: mkdir <dirname>\n");
+        } else {
+            int result = fs_mkdir(args[1]);
+            if (result == 0) {
+                vga_writestring("Directory created successfully\n");
+            } else {
+                vga_writestring("Error: Failed to create directory\n");
+            }
+        }
     } else if (strcmp(args[0], "meminfo") == 0) {
         vga_writestring("DEBUG: Executing meminfo command\n");
         MemoryInfo info;
