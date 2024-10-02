@@ -1,160 +1,143 @@
-# ML/LLM Custom Kernel
+<<<<<<< HEAD=======
+# ML Kernel Project
 
-Welcome to the **ML/LLM Custom Kernel**, a high-performance operating system kernel designed explicitly for machine learning (ML) and large language model (LLM) development. This kernel integrates advanced ML libraries (PyTorch, TensorFlow) using C/C++ to offer unparalleled speed, resource management, and direct hardware utilization. It includes a comprehensive API for developers, providing direct access to optimized kernel-level operations.
+This project is a custom kernel implementation developed as a learning exercise. It includes basic functionalities such as memory management, a simple file system, task scheduling, and a command-line interface.
+
+## Project Structure
+
+```
+ml-kernel/
+├── bootloader/
+│   ├── Makefile
+│   ├── boot.asm
+│   ├── linker.ld
+│   └── loaderer.c
+├── build/
+│   └── kernel.bin
+├── include/
+│   ├── filesystem.h
+│   ├── gpu.h
+│   ├── interrupt.h
+│   ├── io.h
+│   ├── kernel.h
+│   ├── keyboard.h
+│   ├── memory.h
+│   ├── process.h
+│   ├── serial.h
+│   ├── string.h
+│   ├── syscall.h
+│   ├── task.h
+│   ├── timer.h
+│   └── vga.h
+├── iso/
+│   ├── boot/
+│   │   ├── grub/
+│   │   └── kernel.bin
+│   └── grub/
+│       └── grub.cfg
+├── kernel/
+│   ├── Makefile
+│   ├── drivers/
+│   │   ├── gpu.c
+│   │   ├── keyboard.c
+│   │   ├── serial.c
+│   │   ├── timer.c
+│   │   └── vga.c
+│   ├── filesystem.c
+│   ├── interrupt.c
+│   ├── kernel.c
+│   ├── kernel_helpers.c
+│   ├── linker.ld
+│   ├── memory.c
+│   ├── process.c
+│   ├── string.c
+│   ├── syscall.c
+│   └── task.c
+├── tools/
+│   ├── create-iso.sh
+│   └── qemu-run.sh
+└── README.md
+```
 
 ## Features
 
-- **Optimized Tensor and Matrix Operations**: Direct kernel support for high-speed tensor computations, leveraging GPU, TPU, and other hardware accelerators.
-- **Integrated PyTorch and TensorFlow**: Built-in integration using C/C++ APIs for rapid training, inference, and model management.
-- **Dynamic Resource Allocation**: Smart hardware allocation across CPUs, GPUs, and TPUs to maximize resource utilization.
-- **Zero-Copy Data Transfer**: Efficient data movement between kernel space and user space without intermediate copying, enhancing performance.
-- **Kernel-Level Model Management**: Manage ML model lifecycle (loading, saving, training, inference) directly from the kernel for improved speed and efficiency.
-- **API Access**: A versatile API to interact with kernel functionalities, supporting multiple languages and remote communication.
-- **Security and Privacy**: Real-time data encryption, access control, and confidential computing support for safe model training and data processing.
-- **Real-Time Monitoring**: Access real-time hardware usage, training status, and resource metrics through the kernel API.
+- Basic memory management (physical and virtual memory allocation)
+- Simple in-memory file system
+- Task scheduling
+- VGA text mode output
+- Keyboard input
+- Serial port logging
+- Command-line interface with basic commands
 
-## Table of Contents
+## Building the Kernel
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Overview](#api-overview)
-  - [Core Operations](#core-operations)
-  - [Memory and Resource Management](#memory-and-resource-management)
-  - [Model Management](#model-management)
-  - [Training and Inference](#training-and-inference)
-- [Examples](#examples)
-- [Development and Contribution](#development-and-contribution)
-- [License](#license)
+To build the kernel, follow these steps:
 
-## Installation
-
-### Prerequisites
-- Compatible hardware (x86_64, ARM, etc.) with GPU/TPU for optimal performance.
-- At least 8 GB of RAM (16 GB or more recommended for large models).
-- An active internet connection for downloading dependencies.
-
-### Building the Kernel
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/goldenhippo58/zernel.git
-   cd ml-kernel
+1. Navigate to the kernel directory:
+   ```
+   cd ml-kernel/kernel
    ```
 
-2. **Compile the Kernel:**
-   - Ensure you have a C/C++ compiler (e.g., GCC, Clang) and necessary build tools installed.
-   - Run the build script:
-     ```bash
-     ./build_kernel.sh
-     ```
-   - The kernel will be compiled with integrated PyTorch and TensorFlow libraries.
-
-3. **Install the Kernel:**
-   - Copy the compiled kernel and modules to your boot directory:
-     ```bash
-     sudo cp ./build/output/kernel.img /boot/
-     sudo cp -r ./build/modules/ /lib/modules/
-     ```
-
-4. **Update Bootloader:**
-   - Update your bootloader configuration (e.g., GRUB) to include the new kernel.
-   - Reboot your system to start using the custom ML/LLM kernel.
-
-## Usage
-
-### API Usage
-The kernel exposes a comprehensive API for interacting with its ML and LLM capabilities. You can access the API using the provided language bindings (C++, Python, etc.).
-
-1. **Include the kernel API in your C++ program:**
-   ```cpp
-   #include <kernel_api.h>
-
-   int main() {
-       // Initialize the kernel API
-       KernelAPI kernel;
-
-       // Create a tensor
-       Tensor tensor = kernel.create_tensor({3, 3});
-
-       // Run a matrix multiplication
-       Tensor result = kernel.matrix_multiply(tensor, tensor);
-       
-       return 0;
-   }
+2. Run the make command:
+   ```
+   make clean
+   make
    ```
 
-2. **Python API Example:**
-   ```python
-   import ml_llm_kernel_api as kernel
+3. If successful, this will create a `kernel.bin` file in the `build` directory.
 
-   # Initialize the kernel API
-   api = kernel.KernelAPI()
+## Creating a Bootable ISO
 
-   # Load a model
-   model = api.load_model('/path/to/model')
+To create a bootable ISO:
 
-   # Run inference
-   output = api.run_inference(model, input_data)
+1. Copy the kernel binary to the ISO directory:
+   ```
+   cp build/kernel.bin iso/boot/
    ```
 
-## API Overview
+2. Use GRUB to create the ISO:
+   ```
+   grub-mkrescue -o mykernel.iso iso
+   ```
 
-### Core Operations
-- **create_tensor(dimensions)**: Create a new tensor with the specified dimensions.
-- **matrix_multiply(tensor1, tensor2)**: Perform matrix multiplication between two tensors.
-- **tensor_operations(tensor, operation)**: Execute element-wise tensor operations (e.g., addition, subtraction).
+## Running the Kernel
 
-### Memory and Resource Management
-- **allocate_memory(size)**: Allocate kernel-managed memory for tensors or data buffers.
-- **shared_memory_buffer()**: Create a shared memory buffer for efficient data exchange.
+To run the kernel in QEMU:
 
-### Model Management
-- **load_model(model_path)**: Load a pre-trained model into kernel space.
-- **save_model(model, destination_path)**: Save a model from kernel space to disk.
-- **run_inference(model, input_data)**: Execute inference using a loaded model.
-
-### Training and Inference
-- **start_training(model, dataset)**: Begin a training session with the specified model and dataset.
-- **pause_training(session_id)**: Pause a running training session.
-- **resume_training(session_id)**: Resume a previously paused training session.
-- **get_training_status(session_id)**: Retrieve real-time status and metrics of an ongoing training session.
-
-## Examples
-
-### C++: Matrix Multiplication
-```cpp
-#include <kernel_api.h>
-
-int main() {
-    KernelAPI kernel;
-    Tensor tensor1 = kernel.create_tensor({3, 3});
-    Tensor tensor2 = kernel.create_tensor({3, 3});
-    
-    Tensor result = kernel.matrix_multiply(tensor1, tensor2);
-    // Use result...
-    return 0;
-}
+```
+qemu-system-x86_64 -cdrom mykernel.iso
 ```
 
-### Python: Model Inference
-```python
-import ml_llm_kernel_api as kernel
+## Available Commands
 
-api = kernel.KernelAPI()
-model = api.load_model('/path/to/model')
-output = api.run_inference(model, input_data)
-print(output)
-```
+Once the kernel is running, you can use the following commands:
 
-## Development and Contribution
+- `help`: Display a list of available commands
+- `clear`: Clear the screen
+- `create <filename>`: Create a new file
+- `write <filename> <content>`: Write content to a file
+- `read <filename>`: Read content from a file
+- `delete <filename>`: Delete a file
+- `list`: List all files
+- `meminfo`: Display memory information
+- `test`: Run a series of tests (if implemented)
 
-We welcome contributions from the community! To get started:
+## Debugging
 
-1. Fork the repository.
-2. Make your changes in a feature branch.
-3. Submit a pull request for review.
+The kernel includes various debug statements throughout the code. These can be enabled or modified to help diagnose issues during development.
 
-Please ensure that your code adheres to the coding standards specified in the `CONTRIBUTING.md`.
+## Future Improvements
+
+- Implement a more sophisticated file system
+- Add support for running user-space programs
+- Improve memory management with paging and virtual memory
+- Implement more system calls
+- Add networking capabilities
+
+## Contributing
+
+This is a personal learning project, but suggestions and improvements are welcome. Please open an issue or submit a pull request if you have any contributions.
 
 ## License
 
-This project is licensed under the MIT License - see the `LICENSE.md` file for details.
+>>>>>>> f94e0d043def3ae826f53a174132f1f326baf6e3
