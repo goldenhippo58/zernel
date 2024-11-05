@@ -1,4 +1,4 @@
-<<<<<<< HEAD=======
+
 # ML Kernel Project
 
 This project is a custom kernel implementation developed as a learning exercise. It includes basic functionalities such as memory management, a simple file system, task scheduling, and a command-line interface.
