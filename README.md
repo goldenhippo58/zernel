@@ -139,5 +139,3 @@ The kernel includes various debug statements throughout the code. These can be e
 This is a personal learning project, but suggestions and improvements are welcome. Please open an issue or submit a pull request if you have any contributions.
 
 ## License
-
->>>>>>> f94e0d043def3ae826f53a174132f1f326baf6e3
